@@ -1,5 +1,4 @@
-#include <bits/stdc++.h>
-#include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -15,7 +14,7 @@ struct node {
 
 node *empty = new node();
 
-void add(int ind, int val, node *&nd, int ns = 1, int ne = 1e7) {
+void add(int ind, int val, node *&nd, int ns = -1e9, int ne = 1e9) {
     if (ind < ns or ind > ne)
         return;
     if (nd == empty)
@@ -30,7 +29,7 @@ void add(int ind, int val, node *&nd, int ns = 1, int ne = 1e7) {
     nd->sum = nd->lf->sum + nd->rt->sum;
 }
 
-int get(int qe, int qs, node *&nd, int ns = 1, int ne = 1e7) {
+int get(int qe, int qs, node *&nd, int ns = -1e9, int ne = 1e9) {
     if (qe < ns or qs > ne)
         return 0;
     if (ns >= qs and ne <= qe)
@@ -40,7 +39,7 @@ int get(int qe, int qs, node *&nd, int ns = 1, int ne = 1e7) {
            get(qe, qs, nd->rt, mid + 1, ne);
 }
 
-int find(int val, node *&nd, int ns = 1, int ne = 1e7) {
+int find(int val, node *&nd, int ns = -1e9, int ne = 1e9) {
     if (ns == ne)
         return ns;
     int szLf = nd->lf->sum;
@@ -74,35 +73,6 @@ struct order_statistic_set {
         add(val, -min(cnt, count(val)), root);
     }
     int lowerBound(int val) {
-        return get(val - 1, 1, root);
+        return get(val - 1, -1e9, root);
     }
 };
-
-int n;
-int arr[200005];
-
-int main() {
-#ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-#else
-    // freopen("input.txt", "r", stdin);
-    // freopen("output.txt", "w", stdout);
-#endif
-    int t;
-    cin >> t;
-    while (t--) {
-        order_statistic_set mySet;
-        cin >> n;
-        long long invCnt = 0;
-        for (int i = 0; i < n; i++) {
-            cin >> arr[i];
-        }
-        for (int i = n - 1; i >= 0; i--) {
-            invCnt += mySet.lowerBound(arr[i]);
-            mySet.insert(arr[i]);
-        }
-        cout << invCnt << endl;
-    }
-    return 0;
-}
